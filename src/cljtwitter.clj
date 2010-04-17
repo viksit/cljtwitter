@@ -1,7 +1,7 @@
 ; http://p.hagelb.org/http-client-send-body
 ; http://p.hagelb.org/couch.clj.html
 
-(ns test1
+(ns cljtwitter
    (:gen-class)
    (:use [clojure.contrib.sql :only (with-connection with-query-results)] )
    (:use [clojure.contrib.http.agent :only [http-agent status string]])
@@ -9,14 +9,14 @@
    ;(:use [clojure.http.client :only [url-encode]])
    (:use [clojure.contrib.str-utils :only [str-join]])
    (:use [org.danlarkin.json :only [encode-to-str decode-from-str]])
-
+   (:use [clojure.contrib.str-utils :only [str-join]])
    (:import (java.sql DriverManager)
 	    (java.net URL URLEncoder)
 	    (java.io StringReader InputStream)))
 
 ; Variable declarations
 ; Database specific
-(def +db-path+  "/Users/viksit/work/clojure/test1/test1.db")
+(def +db-path+  "/Users/viksit/work/clojure/cljtwitter/test1.db")
 (def +db-specs+ {:classname  "org.sqlite.JDBC",
                  :subprotocol   "sqlite",
                  :subname       +db-path+})
@@ -34,7 +34,7 @@ representation of text."
 
 (defn construct-url [qy]
   "Construct a url given a query"
-     (format +url-to-fetch+ qy))
+     (format +url-to-fetch+ (url-encode qy)))
 
 (defn- fetch-url [url]
   "Fetch a URL through an HTTP agent"
@@ -53,6 +53,11 @@ representation of text."
   (let [agnts (fetch-url (construct-url query))]
     (collect-response agnts)))
 
+(defn- parse-results
+  "Function to parse json results returned by the search"
+  [jsonres]
+  (decode-from-str (first jsonres)))
+  
 
 (defn -main [& args]
   "This is a sample comment"
