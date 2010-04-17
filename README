@@ -1,0 +1,5 @@
+# cljtwitter
+This is a Clojure library to search Twitter with and put results into a database. It is a project I'm using to learn various aspects of Clojure and thus will always be under development.
+
+## License
+This code is licensed under the MIT license.
